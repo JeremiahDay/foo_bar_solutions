@@ -41,9 +41,6 @@ def solution(dimensions, your_position, trainer_position, distance):
                 else:
                     count += step
                 line_of_sight[s] = (e_r_dd, e)
-    for e in line_of_sight.items():
-        if e[1][1] == 'hit':
-            print(e)
     return count
 
 def dist_square(a, b):
@@ -145,8 +142,8 @@ class Frame(object):
     def tiles_within_circle(self, pos, distance):
         dd = distance**2
         hx, hy = self._ref.p1
-        for ix in range(0, distance + pos.x, hx):
-            for iy in range(0, distance + pos.y, hy):
+        for ix in range(0, distance + pos.x + 1, hx):
+            for iy in range(0, distance + pos.y + 1, hy):
                 if ix**2 + iy**2 < dd:
                     tx = (ix + hx) / (2 * hx)
                     ty = (iy + hy) / (2 * hy)
@@ -154,7 +151,7 @@ class Frame(object):
                     yield Tile(tx, ty, r)
         if pos.x**2 < dd:  # second quadrant; x < 0, y >= 0
             for ix in range(-distance - pos.x, 1, hx):
-                for iy in range(0, distance + pos.y, hy):
+                for iy in range(0, distance + pos.y + 1, hy):
                     if ix**2 + iy**2 < dd:
                         tx = (ix + hx) / (2 * hx)
                         ty = (iy + hy) / (2 * hy)
@@ -171,7 +168,7 @@ class Frame(object):
                             (-1)**(1 + (tx + 1) % 2) * ((ty + 1) % 2)) % 4
                         yield Tile(tx, ty, r)
         if pos.y**2 < dd:  # fourth quadrant; x >= 0, y < 0
-            for ix in range(0, distance + pos.y, hx):
+            for ix in range(0, distance + pos.y + 1, hx):
                 for iy in range(-distance - pos.y, 1, hy):
                     if ix**2 + iy**2 < dd:
                         tx = (ix + hx) / (2 * hx)
